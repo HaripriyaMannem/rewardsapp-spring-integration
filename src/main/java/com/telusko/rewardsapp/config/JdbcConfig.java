@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.sql.*;
 
-@Configuration
 public class JdbcConfig
 {
+
     static
     {
         //load and register Driver

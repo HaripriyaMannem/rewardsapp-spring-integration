@@ -7,6 +7,7 @@ import com.telusko.rewardsapp.beans.GiftCard;
 import com.telusko.rewardsapp.beans.Rewards;
 import com.telusko.rewardsapp.beans.User;
 import com.telusko.rewardsapp.config.JdbcConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -16,94 +17,17 @@ import java.util.List;
 @Repository
 public class RewardsRepo {
 
+    @Autowired
+    Rewards reward;
+    @Autowired
+    GiftCard giftCard;
+    @Autowired
+    Category category;
     Connection connect=null;
     PreparedStatement pstmnt=null;
     Statement stmt=null;
     ResultSet result=null;
 
-    public void insertRewards(Rewards rewards)
-    {
-        try
-        {
-            connect = JdbcConfig.getDbConnection();
-            if(connect!=null)
-            {
-                String sql="INSERT INTO rewards (rid, name) VALUES(?,?)";
-                pstmnt=connect.prepareStatement(sql);
-
-                pstmnt.setInt(1, rewards.getId());
-                pstmnt.setString(2, rewards.getName());
-
-                int rowsAffected = pstmnt.executeUpdate();
-                if(rowsAffected==1)
-                {
-                    System.out.println("Insertion Successful");
-                }
-                else
-                {
-                    System.out.println("Insertion failed!");
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            try
-            {
-                JdbcConfig.closeResource(result, pstmnt, connect);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void insertCategories(Category category, Rewards rewards)
-    {
-        try
-        {
-            connect = JdbcConfig.getDbConnection();
-            if(connect!=null)
-            {
-                String sql="INSERT INTO category (cid, name, points, rid) VALUES(?,?,?,?)";
-                pstmnt=connect.prepareStatement(sql);
-
-                pstmnt.setInt(1, category.getId());
-                pstmnt.setString(2, category.getName());
-                pstmnt.setInt(3, category.getPoints());
-                pstmnt.setInt(4, rewards.getId());
-
-                int rowsAffected = pstmnt.executeUpdate();
-                if(rowsAffected==1)
-                {
-                    System.out.println("Insertion Successful");
-                }
-                else
-                {
-                    System.out.println("Insertion failed!");
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            try
-            {
-                JdbcConfig.closeResource(result, pstmnt, connect);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
 
     public List<Rewards> fetchRewards()
     {
@@ -119,7 +43,6 @@ public class RewardsRepo {
 
                 while (result.next())
                 {
-                    Rewards reward = new Rewards();
                     reward.setId(result.getInt(1));
                     reward.setName(result.getString(2));
                     rewards.add(reward);
@@ -160,7 +83,6 @@ public class RewardsRepo {
 
                 while (result.next())
                 {
-                    Category category = new Category();
                     category.setId(result.getInt(1));
                     category.setName(result.getString(2));
                     category.setPoints(result.getInt(3));
@@ -270,7 +192,6 @@ public class RewardsRepo {
 
                 while (result.next())
                 {
-                    GiftCard giftCard = new GiftCard();
                     giftCard.setName(result.getString(1));
                     giftCard.setPoints(result.getInt(2));
                     giftCard.setCouponCode(result.getString(3));

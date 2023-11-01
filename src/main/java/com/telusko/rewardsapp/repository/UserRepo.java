@@ -3,6 +3,11 @@ package com.telusko.rewardsapp.repository;
 
 import com.telusko.rewardsapp.beans.User;
 import com.telusko.rewardsapp.config.JdbcConfig;
+import com.telusko.rewardsapp.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -12,57 +17,16 @@ import java.util.List;
 @Repository
 public class UserRepo
 {
+
     Connection connect=null;
     PreparedStatement pstmnt=null;
     Statement stmt=null;
     ResultSet result=null;
 
-    //one time activity
-    public void insertUsers(User user)
-    {
-        try
-        {
-            connect = JdbcConfig.getDbConnection();
-            if(connect!=null)
-            {
-                String sql="INSERT INTO users (userId, username, userPwd) VALUES(?,?,?)";
-                pstmnt=connect.prepareStatement(sql);
-
-                pstmnt.setInt(1, user.getId());
-                pstmnt.setString(2, user.getName());
-                pstmnt.setString(3, user.getPassword());
-
-                int rowsAffected = pstmnt.executeUpdate();
-                if(rowsAffected==1)
-                {
-                    System.out.println("Insertion Successful");
-                }
-                else
-                {
-                    System.out.println("Insertion failed!");
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-            try
-            {
-                JdbcConfig.closeResource(result, pstmnt, connect);
-            }
-            catch (SQLException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public List<User> fetchUsers()
     {
         List<User> users = new ArrayList<>();
+
         try
         {
             connect = JdbcConfig.getDbConnection();
@@ -75,6 +39,7 @@ public class UserRepo
                 while (result.next())
                 {
                     User user = new User();
+                    //User user = applicationContext.getBean(User.class);
                     user.setId(result.getInt(1));
                     user.setName(result.getString(2));
                     user.setPassword(result.getString(3));

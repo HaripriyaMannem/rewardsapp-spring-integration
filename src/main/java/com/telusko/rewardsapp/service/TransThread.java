@@ -11,12 +11,6 @@ import java.util.Random;
 @Service
 public class TransThread implements Runnable
 {
-    List<User> users;
-
-    public TransThread(List<User> userList)
-    {
-        users = userList;
-    }
 
     @Autowired
     UserRepo userRepo;
@@ -27,6 +21,8 @@ public class TransThread implements Runnable
 
         try
         {
+            List<User> users = userRepo.fetchUsers();
+
             while(!Thread.currentThread().isInterrupted())
             {
 
@@ -53,4 +49,5 @@ public class TransThread implements Runnable
             throw new RuntimeException(e);
         }
     }
+
 }

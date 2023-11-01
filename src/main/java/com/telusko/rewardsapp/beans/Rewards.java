@@ -6,6 +6,7 @@ import java.util.List;
 @Component
 public class Rewards
 {
+
     private int id;
     private String name;
     List<Category> categoryList;
@@ -26,13 +27,6 @@ public class Rewards
         this.name = name;
     }
 
-    public List<Category> getCategoryList() {
-        return categoryList;
-    }
-
-    public void setCategoryList(List<Category> categoryList) {
-        this.categoryList = categoryList;
-    }
 
     @Override
     public String toString() {

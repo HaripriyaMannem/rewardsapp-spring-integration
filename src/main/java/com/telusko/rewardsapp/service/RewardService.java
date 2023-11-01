@@ -1,6 +1,6 @@
 package com.telusko.rewardsapp.service;
 
-import com.telusko.rewardsapp.Main;
+import com.telusko.rewardsapp.main.RewardsApp;
 import com.telusko.rewardsapp.beans.Category;
 import com.telusko.rewardsapp.beans.GiftCard;
 import com.telusko.rewardsapp.beans.Rewards;
@@ -9,6 +9,7 @@ import com.telusko.rewardsapp.repository.RewardsRepo;
 import com.telusko.rewardsapp.repository.UserRepo;
 import com.telusko.rewardsapp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import static com.telusko.rewardsapp.util.Constants.*;
 
 @Service
 public class RewardService {
+
 
     @Autowired
     Util util;
@@ -104,7 +106,7 @@ public class RewardService {
             //Creating users, Background Transaction thread again when user didn't get chance first time
             try
             {
-                Main.main(null);
+                RewardsApp.main(null);
             }
             catch (Exception e)
             {

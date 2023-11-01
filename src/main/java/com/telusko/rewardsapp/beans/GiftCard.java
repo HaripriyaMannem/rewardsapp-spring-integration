@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GiftCard
 {
+
     private String name;
     private int points;
     private String couponCode;

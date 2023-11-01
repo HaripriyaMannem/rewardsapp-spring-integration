@@ -1,11 +1,14 @@
 package com.telusko.rewardsapp.beans;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Scope(value="prototype")
 public class User
 {
+
     private int id;
     private String name;
     private String password;
