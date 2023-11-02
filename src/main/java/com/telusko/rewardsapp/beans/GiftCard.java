@@ -50,10 +50,6 @@ public class GiftCard
         this.couponCode = couponCode;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
     public void setUserId(int userId) {
         this.userId = userId;
     }

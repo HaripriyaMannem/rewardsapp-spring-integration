@@ -9,12 +9,12 @@ import com.telusko.rewardsapp.repository.RewardsRepo;
 import com.telusko.rewardsapp.repository.UserRepo;
 import com.telusko.rewardsapp.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.telusko.rewardsapp.util.Constants.*;
 
@@ -63,10 +63,7 @@ public class RewardService {
         {
             //show Rewards
             util.msg1();
-            for (Rewards reward : rewards)
-            {
-                System.out.println(reward.getId() + ". " + reward.getName());
-            }
+            rewards.forEach(r -> System.out.println(r.getId() + ". " + r.getName()));
             util.msg2();
 
             Scanner sc = new Scanner(System.in);
@@ -85,7 +82,6 @@ public class RewardService {
                         System.out.println(RED + e.getMessage() + RESET);
                         displayCat(user, id);
                     }
-
                     redeemItems(rewards, users, user, userId);
                 }
                 else
@@ -120,11 +116,8 @@ public class RewardService {
         List<Category> categories = rewardsRepo.getCategories(id);
         System.out.println("Number \tCategory \tPoints");
 
-        for (Category category : categories)
-        {
-            System.out.println(category.getId() + "  \t\t" + category.getName()
-                    + " \t" + category.getPoints());
-        }
+        categories.forEach(category -> System.out.println(category.getId() + "  \t\t" + category.getName()
+                + " \t" + category.getPoints()));
 
         util.msg3(user.getPoints());
         System.out.println("Enter Which " + YELLOW + "category" + RESET + " you want to redeem: ");
@@ -195,14 +188,10 @@ public class RewardService {
     private void displayGiftCards(User user)
     {
         List<GiftCard> giftCards1 = rewardsRepo.getGiftCards(user);
-        int i = 0;
 
-        for(GiftCard giftCard1 : giftCards1)
-        {
-            i++;
-            System.out.println(YELLOW + i + "." + giftCard1.getName() + " Coupon code "
-                    + giftCard1.getCouponCode() + " worth of "+ giftCard1.getPoints()  +" points"+  RESET);
-        }
+        AtomicInteger id = new AtomicInteger();
+        giftCards1.forEach(giftCard -> System.out.println(YELLOW + id.incrementAndGet() + "." + giftCard.getName() + " Coupon code "
+                + giftCard.getCouponCode() + " worth of "+ giftCard.getPoints()  +" points"+  RESET));
 
         System.out.println(PURPLE + "Use codes at www.teluskorewards.com website to purchase them.");
         System.out.println("Thanks for visiting Rewards App, see you again." + RESET);
