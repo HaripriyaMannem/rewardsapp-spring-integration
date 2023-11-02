@@ -46,7 +46,6 @@ public class RewardService {
                 //Show Rewards to the user
                 users = userRepo.fetchUsers();
                 displayRewards(rewards, users, userId);
-
                 flag= false;
             }
             catch (Exception e)
@@ -142,13 +141,14 @@ public class RewardService {
                 giftCard.setCouponCode(util.generateCouponCode());
                 giftCard.setName(category.getName());
                 giftCard.setPoints(category.getPoints());
+                giftCard.setUserId(user.getId());
 
-                int insertCount = rewardsRepo.saveGiftCards(giftCard, user.getId());
+                int insertCount = rewardsRepo.saveGiftCards(giftCard);
                 if(insertCount > 0)
                 {
                     util.msg4(category.getName(), giftCard.getCouponCode());
                     user.setPoints(user.getPoints() - category.getPoints());
-                    rewardsRepo.updateUserPoints(user);
+                    userRepo.updateUser(user);
                 }
 
                 giftCards.add(giftCard);

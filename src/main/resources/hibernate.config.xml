@@ -1,0 +1,34 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+ "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+ "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+ 
+<hibernate-configuration>
+<session-factory>
+<!--  SQL dialect  to inform hibernate to generate the query specific to database engine -->
+<property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+
+<!--  To inform Hibernate about the database details -->
+<property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+<property name="connection.url">jdbc:mysql://localhost:3306/teluskodb</property>
+<property name="connection.username">root</property>
+<property name="connection.password">Password1</property>
+
+
+<!--  To Infrom hibernate to display query generated during execution -->
+<property name="show_sql">false</property>
+
+
+<!--  To Infrom hibernate to display formated style query generated during execution -->
+<property name="hibernate.format_sql">true</property>
+
+<!--  To infrom Hibernate to use existing table or to create new table  -->
+<property name="hbm2ddl.auto">update</property>
+
+<!--  specifying mapping information  -->
+<mapping class="com.telusko.rewardsapp.beans.User"/>
+<mapping class="com.telusko.rewardsapp.beans.GiftCard"/>
+<mapping class="com.telusko.rewardsapp.beans.Rewards"/>
+<mapping class="com.telusko.rewardsapp.beans.Category"/>
+
+</session-factory>
+</hibernate-configuration>

@@ -2,54 +2,36 @@ package com.telusko.rewardsapp.repository;
 
 
 import com.telusko.rewardsapp.beans.User;
-import com.telusko.rewardsapp.config.JdbcConfig;
-import com.telusko.rewardsapp.service.AuthService;
+import com.telusko.rewardsapp.config.HibernateConfig;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
-import java.util.ArrayList;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 public class UserRepo
 {
-
-    Connection connect=null;
-    PreparedStatement pstmnt=null;
-    Statement stmt=null;
-    ResultSet result=null;
+    @Autowired
+    HibernateConfig hibernateConfig;
 
     public List<User> fetchUsers()
     {
-        List<User> users = new ArrayList<>();
-
-        try
+        List<User> users;
+        try(Session session = hibernateConfig.getSession();)
         {
-            connect = JdbcConfig.getDbConnection();
-            if(connect!=null)
-            {
-                stmt=connect.createStatement();
-                String query = "select * from users";
-                ResultSet result = stmt.executeQuery(query);
+            CriteriaQuery<User> cq = session.getCriteriaBuilder().createQuery(User.class);
+            Root<User> rootEntry = cq.from(User.class);
 
-                while (result.next())
-                {
-                    User user = new User();
-                    //User user = applicationContext.getBean(User.class);
-                    user.setId(result.getInt(1));
-                    user.setName(result.getString(2));
-                    user.setPassword(result.getString(3));
-                    user.setTransAmount(result.getInt(4));
-                    user.setPoints(result.getInt(5));
-                    users.add(user);
-                }
-            }
+            CriteriaQuery<User> all = cq.select(rootEntry);
+            TypedQuery<User> allQuery = session.createQuery(all);
+            users =  allQuery.getResultList();
         }
-        catch (SQLException e) {
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
         return users;
@@ -57,22 +39,13 @@ public class UserRepo
 
     public boolean updateUser(User user)
     {
-        try
+        try(Session session = hibernateConfig.getSession();)
         {
-            connect=JdbcConfig.getDbConnection();
-            if(connect != null)
-            {
-                String sql="UPDATE users set transAmount=?, redeemPoints=? where userId=?";
-                pstmnt=connect.prepareStatement(sql);
-
-                pstmnt.setInt(1, user.getTransAmount());
-                pstmnt.setInt(2, user.getPoints());
-                pstmnt.setInt(3, user.getId());
-
-                return pstmnt.execute();
-            }
+            Transaction transaction=session.beginTransaction();
+            session.saveOrUpdate(user);
+            transaction.commit();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             throw new RuntimeException(e);
         }

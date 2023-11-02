@@ -2,13 +2,27 @@ package com.telusko.rewardsapp.beans;
 
 import org.springframework.stereotype.Component;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
 @Component
+@Entity(name= "category")
 public class Category
 {
 
+    @Id
+    @Column(name= "cid")
     private int id;
+
+    @Column(name= "name")
     private String name;
+
+    @Column(name= "points")
     private int points;
+
+    @Column(name= "rid")
+    private int rid;
 
     public int getId() {
         return id;

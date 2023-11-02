@@ -27,7 +27,6 @@ public class AuthService
     public void process()
     {
         List<User> users = userRepo.fetchUsers();
-        System.out.println(users);
         //Background Thread for Transactions
         Thread thread = new Thread(transThread);
         thread.start();

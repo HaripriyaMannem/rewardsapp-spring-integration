@@ -2,18 +2,31 @@ package com.telusko.rewardsapp.beans;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
 import java.util.List;
 
 @Component
-@Scope(value="prototype")
+@Entity(name= "users")
 public class User
 {
-
+    @Id
+    @Column(name = "userId")
     private int id;
+
+    @Column(name = "userName")
     private String name;
+
+    @Column(name = "userPwd")
     private String password;
+
+    @Column(name = "transAmount")
     private int transAmount;
+
+    @Column(name = "redeemPoints")
     private int points;
+
+    @OneToMany(cascade= CascadeType.ALL)
     private List<GiftCard> giftCards;
 
 
@@ -21,24 +34,12 @@ public class User
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getTransAmount() {
